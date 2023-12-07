@@ -42,7 +42,7 @@ def handle_message(event):
 
     try:
         gpt_response = openai.Completion.create(
-            engine="text-davinci-003",
+            engine="davinci-003",
             prompt=message_text,
             max_tokens=50
         )
