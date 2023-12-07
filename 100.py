@@ -15,7 +15,7 @@ handler = WebhookHandler(CHANNEL_SECRET)
 OPENAI_API_KEY = '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'
 openai.api_key = OPENAI_API_KEY
 
-
+engine = "text-davinci-003"
 
 
 app = Flask(__name__)
@@ -35,7 +35,7 @@ def callback():
     return 'OK'
 
 
-@handler.add(MessageEvent, message=TextMessage)
+
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     user_id = event.source.user_id
