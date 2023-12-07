@@ -1,6 +1,7 @@
 from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
+from linebot.exceptions import LineBotApiError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 import openai
 
@@ -39,25 +40,34 @@ def handle_message(event):
     user_id = event.source.user_id
     message_text = event.message.text
 
+    try:
+        gpt_response = openai.Completion.create(
+            engine="text-davinci-003",
+            prompt=message_text,
+            max_tokens=50
+        )
+        gpt_answer = gpt_response.choices[0].text.strip()
 
-    gpt_response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=message_text,
-        max_tokens=50
-    )
-    gpt_answer = gpt_response.choices[0].text.strip()
+        final_answer = f"answer: {gpt_answer}"
 
-  
-  
-
-    final_answer = f"answer: {gpt_answer}"
-
-   
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=final_answer)
-    )
-
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=final_answer)
+        )
+    except openai.error.RateLimitError:
+        
+        error_message = "Sorry, I'm currently overloaded. Please try again later."
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=error_message)
+        )
+    except LineBotApiError as e:
+      
+        error_message = f"Line Bot API error: {e.error.message}"
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=error_message)
+        )
 
 
 
