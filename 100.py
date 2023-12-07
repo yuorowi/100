@@ -15,7 +15,7 @@ handler = WebhookHandler(CHANNEL_SECRET)
 OPENAI_API_KEY = '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'
 openai.api_key = OPENAI_API_KEY
 
-engine = "curie-instruct-beta-003"
+engine = "davinci"
 
 
 app = Flask(__name__)
