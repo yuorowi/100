@@ -1,0 +1,41 @@
+name: Deploy to Vercel
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+          echo \
+            "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+            $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+          sudo apt-get update
+          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+      - name: Build and push Docker image to registry
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: sunnyoursunshine/dapp:latest
+          dockerfile: Dockerfile
+      - name: Deploy to Vercel
+        uses: vercel/action@v21.4.0
+        with:
+          token: ${{ secrets.VERCEL_TOKEN }}
+          githubCommitSha: ${{ github.sha }}
+          vercelOrgId: your-org-id
+          vercelProjectId: your-project-id
+          prod: true
+          buildEnv: 'CI_COMMIT_SHA=${{ github.sha }}'
+
+
+
