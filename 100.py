@@ -11,7 +11,7 @@ line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(CHANNEL_SECRET)
 
 
-OPENAI_API_KEY = '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'
+OPENAI_API_KEY = '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'
 openai.api_key = OPENAI_API_KEY
 
 
