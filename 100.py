@@ -36,13 +36,14 @@ def callback():
 
 
 @handler.add(MessageEvent, message=TextMessage)
+@handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     user_id = event.source.user_id
     message_text = event.message.text
 
     try:
         gpt_response = openai.Completion.create(
-            engine="davinci-003",
+            engine=engine,
             prompt=message_text,
             max_tokens=50
         )
