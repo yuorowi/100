@@ -19,31 +19,32 @@ async def push_message_async(user_id, text):
         print(f"Error pushing message to AI小幫手: {e}")
 
 @app.route("/callback", methods=['POST'])
-def callback():
+async def callback():
     signature = request.headers['X-Line-Signature']
-    body = request.get_data(as_text=True)
+    body = await request.get_data(as_text=True)
 
     try:
-        handler.handle(body, signature)
+        await handler.handle(body, signature)
     except InvalidSignatureError:
         abort(400)
 
     return 'OK'
 
 @handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
+async def handle_message(event):
     user_message = event.message.text
 
     if event.source.user_id == '@007omugu':
         # 轉發使用者的訊息給 "AI小幫手"
-        asyncio.run(push_message_async('@AI小幫手的LINE ID', user_message))
+        asyncio.create_task(push_message_async('@AI小幫手的LINE ID', user_message))
 
         # 顯示 "AI小幫手" 回傳的訊息
         reply_message = f"你對 AI小幫手 說了：{user_message}"
-        line_bot_api.reply_message(
+        await line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=reply_message)
         )
 
 if __name__ == "__main__":
     app.run(port=5000)
+
