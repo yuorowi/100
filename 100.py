@@ -3,6 +3,7 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 
+
 CHANNEL_SECRET = 'bd1f67e47488ef7d287541cfb175e6ec'
 CHANNEL_ACCESS_TOKEN = 'm/5ssSjjhD4saSEgKyIioep/OoJGzisdGHta3qxl2OhhJdvnmC+fnV4MCaJjavCB2BZBoRK6UYoAY8Y2D1L2iVizgzRwU3Q2QblOcdFlf5/H3XmMrZvSNwbYAB9SCJpHExP5tuhn5RpJDqsut4+imgdB04t89/1O/w1cDnyilFU='
 
@@ -29,17 +30,16 @@ def handle_message(event):
     try:
         ai_bot_id = '@007omugu'
         
-        line_bot_api.push_message(ai_bot_id, TextSendMessage(text=user_message))
-        
-        # 取得 LINE ID 為 "@007omugu" 的帳號所回傳的訊息
-        message_content = line_bot_api.get_message_content(event.message.id)
-        messages = message_content.content.decode()  
+        line_bot_api.push_message(ai_bot_id, TextMessage(text=user_message))
+
+        # 透過 LINE ID 為 '@007omugu' 的帳號取得回應
+        ai_response = line_bot_api.get_profile(ai_bot_id)
         
 
 
         # 將回傳的訊息原封不動地回傳給詢問的對方
 
-        print(f"User ID: {user_id}, Message1: {messages}")
+        print(f"User ID: {user_id}, Message1: {ai_response}")
 
     except LineBotApiError as e:
         print(f"Error pushing or replying message: {e}")
@@ -49,10 +49,10 @@ def handle_message(event):
     print(f"User ID: {user_id}, Message: {reply_message}")
 
     line_bot_api.reply_message(
-            event.reply_token,
-            [TextSendMessage(text=f"你對 AI小幫手 說了：{user_message}"),
-             TextSendMessage(text=messages)]
+            user_id,
+            TextMessage(text=ai_response.display_name + " 說：" + ai_response.status_message)
         )
+
 
 
 
