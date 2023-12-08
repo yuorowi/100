@@ -10,6 +10,7 @@ CHANNEL_ACCESS_TOKEN = 'm/5ssSjjhD4saSEgKyIioep/OoJGzisdGHta3qxl2OhhJdvnmC+fnV4M
 line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(CHANNEL_SECRET)
 
+whitelisted_ids = ['@007omugu']
 
 
 app = Flask(__name__)
@@ -31,25 +32,28 @@ def handle_message(event):
     user_message = event.message.text
     
     if event.source.user_id == '@007omugu':
-       
-        try:
-            ai_bot_id = '@007omugu'
-            line_bot_api.push_message(ai_bot_id, TextSendMessage(text=user_message))
-        except LineBotApiError as e:
-            print(f"Error pushing message to AI小幫手: {e}")
+        
+        if event.source.user_id in whitelisted_ids:
+          
+            try:
+                ai_bot_id = '@007omugu'
+                line_bot_api.push_message(ai_bot_id, TextSendMessage(text=user_message))
+            except LineBotApiError as e:
+                print(f"Error pushing message to AI小幫手: {e}")
 
-
-        import time
-        time.sleep(10)
-
-   
-        ai_bot_response = "AI小幫手"  
-
-      
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=ai_bot_response)
-        )
+           
+            reply_message = f"你對 AI小幫手 說了：{user_message}"
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=reply_message)
+            )
+        else:
+            print(f"User {event.source.user_id} is not whitelisted.")
+        
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="SOORY。")
+            )
 
 if __name__ == "__main__":
     app.run(port=5000)
