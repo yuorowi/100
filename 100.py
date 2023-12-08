@@ -35,8 +35,10 @@ def handle_message(event):
         message_content = line_bot_api.get_message_content(event.message.id)
         
         # 讀取 message_content 的內容，並轉成文字
-        messages = message_content.text()
+        messages = message_content.text
         
+
+
         # 將回傳的訊息原封不動地回傳給詢問的對方
 
         print(f"User ID: {user_id}, Message1: {messages}")
@@ -59,5 +61,6 @@ def handle_message(event):
 
 if __name__ == "__main__":
     app.run(port=5000)
+
 
 
