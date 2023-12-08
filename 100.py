@@ -34,14 +34,14 @@ def handle_message(event):
         
         # 取得 LINE ID 為 "@007omugu" 的帳號所回傳的訊息
         messages = line_bot_api.get_message_content(event.message.id)
-        print(f"User ID: {user_id}, Message1: {messages}")
+        print(f"User ID: {user_id}")
 
     except LineBotApiError as e:
         print(f"Error pushing or replying message: {e}")
 
     # 顯示 "AI小幫手" 回傳的訊息
     reply_message = f"你對 AI小幫手 說了：{user_message}"
-    print(f"User ID: {user_id}, Message: {reply_message}, Message1: {messages}")
+    print(f"User ID: {user_id}, Message: {reply_message}")
 
     line_bot_api.reply_message(
             event.reply_token,
