@@ -12,12 +12,7 @@ handler = WebhookHandler(CHANNEL_SECRET)
 
 
 
-
 app = Flask(__name__)
-
-
-
-
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -36,18 +31,24 @@ def handle_message(event):
     user_message = event.message.text
     
     if event.source.user_id == '@007omugu':
-  
+       
         try:
             ai_bot_id = '@007omugu'
             line_bot_api.push_message(ai_bot_id, TextSendMessage(text=user_message))
         except LineBotApiError as e:
             print(f"Error pushing message to AI小幫手: {e}")
 
-  
-        reply_message = f"你對 AI小幫手 說了：{user_message}"
+
+        import time
+        time.sleep(10)
+
+   
+        ai_bot_response = "AI小幫手"  
+
+      
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=reply_message)
+            TextSendMessage(text=ai_bot_response)
         )
 
 if __name__ == "__main__":
