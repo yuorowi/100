@@ -32,7 +32,7 @@ def handle_message(event):
     user_message = event.message.text
     
     if event.source.user_id == '@007omugu':
-        
+
         if event.source.user_id in whitelisted_ids:
           
             try:
@@ -41,7 +41,7 @@ def handle_message(event):
             except LineBotApiError as e:
                 print(f"Error pushing message to AI小幫手: {e}")
 
-           
+      
             reply_message = f"你對 AI小幫手 說了：{user_message}"
             line_bot_api.reply_message(
                 event.reply_token,
@@ -49,11 +49,11 @@ def handle_message(event):
             )
         else:
             print(f"User {event.source.user_id} is not whitelisted.")
-        
+    
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text="SOORY。")
+                TextSendMessage(text="很抱歉，您不在白名單中，請先加為好友。")
             )
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(port=5000)
