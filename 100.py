@@ -10,6 +10,10 @@ CHANNEL_ACCESS_TOKEN = 'm/5ssSjjhD4saSEgKyIioep/OoJGzisdGHta3qxl2OhhJdvnmC+fnV4M
 line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(CHANNEL_SECRET)
 
+target_line_id = '@007omugu'
+
+
+
 app = Flask(__name__)
 
 @app.route("/callback", methods=['POST'])
@@ -27,31 +31,22 @@ def handle_message(event):
     user_message = event.message.text
     user_id = event.source.user_id
 
-    try:
-        ai_bot_id = 'U34890efb0696ac2cfe6f26920cb56954'
-        
-        line_bot_api.push_message(ai_bot_id, TextMessage(text=user_message))
+try:
+    # 透過 LINE ID 取得用戶的基本資訊
+    profile = line_bot_api.get_profile(target_line_id)
 
-        # 透過 LINE ID 為 '@007omugu' 的帳號取得回應
-        ai_response = line_bot_api.get_profile(ai_bot_id)
-        
+    # 獲取 User ID
+    ai_bot_id = profile.user_id
 
+    print(f"The User ID for {target_line_id} is: {ai_bot_id}")
 
-        # 將回傳的訊息原封不動地回傳給詢問的對方
+except LineBotApiError as e:
+    # 處理 LINE Bot API 的錯誤
+    print(f"Error getting profile: {e}")
+except Exception as e:
+    # 其他錯誤處理
+    print(f"Unexpected error: {e}")
 
-        print(f"User ID: {user_id}, Message1: {ai_response}")
-
-    except LineBotApiError as e:
-        print(f"Error pushing or replying message: {e}")
-
-    # 顯示 "AI小幫手" 回傳的訊息
-    reply_message = f"你對 AI小幫手 說了：{user_message}"
-    print(f"User ID: {user_id}, Message: {reply_message}")
-
-    line_bot_api.reply_message(
-            user_id,
-            TextMessage(text=ai_response.display_name + " 說：" + ai_response.status_message)
-        )
 
 
 
