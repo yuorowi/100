@@ -1,4 +1,3 @@
-import asyncio
 from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
@@ -24,6 +23,7 @@ def callback():
 
 
 @handler.add(MessageEvent, message=TextMessage)
+
 def handle_message(event):
     user_id = event.source.user_id
     message_text = event.message.text
@@ -31,7 +31,8 @@ def handle_message(event):
     try:
 
         final_answer = f"answer: {message_text}"
-
+    except:
+        final_answer = f"answer: {0}"
 
     print(f"User ID: {user_id}, Message: {message_text}")
 
