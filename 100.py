@@ -29,18 +29,25 @@ def handle_message(event):
     try:
         ai_bot_id = '@007omugu'
         line_bot_api.push_message(ai_bot_id, TextSendMessage(text=user_message))
+
+        messages = line_bot_api.get_message_content(event.message.id)
+
     except LineBotApiError as e:
         print(f"Error pushing message to AI小幫手: {e}")
 
     # 顯示 "AI小幫手" 回傳的訊息
     reply_message = f"你對 AI小幫手 說了：{user_message}"
-    print(f"User ID: {user_id}, Message: {reply_message}")
+    print(f"User ID: {user_id}, Message: {reply_message}, Message1: {messages}")
+
     line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=reply_message)
-    )
+            event.reply_token,
+            [TextSendMessage(text=f"你對 AI小幫手 說了：{user_message}"),
+             TextSendMessage(text=messages.text)]
+     )
+
+
+
 
 if __name__ == "__main__":
     app.run(port=5000)
-
 
