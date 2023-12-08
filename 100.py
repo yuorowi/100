@@ -21,26 +21,26 @@ def callback():
         abort(400)
     return 'OK'
 
-
 @handler.add(MessageEvent, message=TextMessage)
-
 def handle_message(event):
+    user_message = event.message.text
     user_id = event.source.user_id
-    message_text = event.message.text
 
     try:
+        ai_bot_id = '@007omugu'
+        line_bot_api.push_message(ai_bot_id, TextSendMessage(text=user_message))
+    except LineBotApiError as e:
+        print(f"Error pushing message to AI小幫手: {e}")
 
-        final_answer = f"answer: {message_text}"
-    except:
-        final_answer = f"answer: {0}"
-
-    print(f"User ID: {user_id}, Message: {message_text}")
-
+    # 顯示 "AI小幫手" 回傳的訊息
+    reply_message = f"你對 AI小幫手 說了：{user_message}"
+    print(f"User ID: {user_id}, Message: {reply_message}")
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=final_answer)
+        TextSendMessage(text=reply_message)
     )
 
 if __name__ == "__main__":
     app.run(port=5000)
+
 
