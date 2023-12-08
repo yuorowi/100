@@ -33,9 +33,7 @@ def handle_message(event):
         
         # 取得 LINE ID 為 "@007omugu" 的帳號所回傳的訊息
         message_content = line_bot_api.get_message_content(event.message.id)
-        
-        # 讀取 message_content 的內容，並轉成文字
-        messages = message_content.text
+        messages = message_content.content.decode()  
         
 
 
@@ -61,6 +59,5 @@ def handle_message(event):
 
 if __name__ == "__main__":
     app.run(port=5000)
-
 
 
