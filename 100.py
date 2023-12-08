@@ -28,7 +28,7 @@ def handle_message(event):
     user_id = event.source.user_id
 
     try:
-        ai_bot_id = '@007omugu'
+        ai_bot_id = 'money-money'
         
         line_bot_api.push_message(ai_bot_id, TextMessage(text=user_message))
 
