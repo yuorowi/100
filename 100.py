@@ -1,9 +1,8 @@
 from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
-from linebot.exceptions import InvalidSignatureError
-from linebot.exceptions import LineBotApiError
+from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
-import openai
+
 
 
 CHANNEL_SECRET = 'bd1f67e47488ef7d287541cfb175e6ec'
@@ -12,10 +11,6 @@ line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(CHANNEL_SECRET)
 
 
-OPENAI_API_KEY = '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'
-openai.api_key = OPENAI_API_KEY
-
-engine = "gpt-3.5-turbo-instruct"
 
 
 app = Flask(__name__)
@@ -28,49 +23,32 @@ app = Flask(__name__)
 def callback():
     signature = request.headers['X-Line-Signature']
     body = request.get_data(as_text=True)
+
     try:
         handler.handle(body, signature)
     except InvalidSignatureError:
         abort(400)
+
     return 'OK'
-
-
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    user_id = event.source.user_id
-    message_text = event.message.text
+    user_message = event.message.text
+    
+    if event.source.user_id == '@007omugu':
+  
+        try:
+            ai_bot_id = '@007omugu'
+            line_bot_api.push_message(ai_bot_id, TextSendMessage(text=user_message))
+        except LineBotApiError as e:
+            print(f"Error pushing message to AI小幫手: {e}")
 
-    try:
-        gpt_response = openai.Completion.create(
-            engine=engine,
-            prompt=message_text,
-            max_tokens=50
-        )
-        gpt_answer = gpt_response.choices[0].text.strip()
-
-        final_answer = f"answer: {gpt_answer}"
-
+  
+        reply_message = f"你對 AI小幫手 說了：{user_message}"
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=final_answer)
+            TextSendMessage(text=reply_message)
         )
-    except openai.error.RateLimitError:
-        
-        error_message = "Sorry, I'm currently overloaded. Please try again later."
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=error_message)
-        )
-    except LineBotApiError as e:
-      
-        error_message = f"Line Bot API error: {e.error.message}"
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=error_message)
-        )
-
-
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(port=5000)
