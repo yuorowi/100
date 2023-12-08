@@ -28,12 +28,16 @@ def handle_message(event):
 
     try:
         ai_bot_id = '@007omugu'
+        
+        # 將詢問的訊息轉發給 LINE ID 為 "@007omugu" 的帳號
         line_bot_api.push_message(ai_bot_id, TextSendMessage(text=user_message))
-
+        
+        # 取得 LINE ID 為 "@007omugu" 的帳號所回傳的訊息
         messages = line_bot_api.get_message_content(event.message.id)
+        print(f"User ID: {user_id}, Message1: {messages}")
 
     except LineBotApiError as e:
-        print(f"Error pushing message to AI小幫手: {e}")
+        print(f"Error pushing or replying message: {e}")
 
     # 顯示 "AI小幫手" 回傳的訊息
     reply_message = f"你對 AI小幫手 說了：{user_message}"
@@ -43,7 +47,7 @@ def handle_message(event):
             event.reply_token,
             [TextSendMessage(text=f"你對 AI小幫手 說了：{user_message}"),
              TextSendMessage(text=messages.text)]
-     )
+        )
 
 
 
