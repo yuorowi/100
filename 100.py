@@ -31,9 +31,9 @@ def handle_message(event):
     user_id = event.source.user_id
 
     gpt_response = openai.Completion.create(
-        engine="text-davinci-003",
+        engine="text-davinci-002",
         prompt=user_message,
-        max_tokens=50
+        max_tokens=1000
     )
     gpt_answer = gpt_response.choices[0].text.strip()
 
