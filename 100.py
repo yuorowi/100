@@ -42,16 +42,13 @@ def handle_message(event):
     print(f"User ID: {user_id}, Message1: {gpt_answer}")
     # 發送回答到 LINE
     line_bot_api.reply_message(
-        user_id,
-        TextMessage(text=final_answer)
+        event.reply_token,
+        TextSendMessage(text=final_answer)
     )
 
    
     reply_message = f"你對 AI小幫手 說了：{user_message}"
     print(f"User ID: {user_id}, Message: {reply_message}")
-
-
-
 
 
 
