@@ -31,15 +31,15 @@ def handle_message(event):
     user_id = event.source.user_id
 
     gpt_response = openai.Completion.create(
-        engine="text-davinci-002",
+        engine="text-davinci-003",
         prompt=user_message,
-        max_tokens=1000
+        max_tokens=3000
     )
     gpt_answer = gpt_response.choices[0].text.strip()
 
     final_answer = f"{gpt_answer}"
 
-    print(f"User ID: {user_id}, Message1: {gpt_answer}")
+    print(f"User ID: {user_id}, Message1: {gpt_answer} , Message2: {final_answer} ")
     # 發送回答到 LINE
     line_bot_api.reply_message(
         event.reply_token,
