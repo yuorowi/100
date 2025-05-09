@@ -1,8 +1,9 @@
-from flask import Flask, request, abort 
+from flask import Flask, request, abort  
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 import openai
+import time  # 引入 time 模組
 
 # 設定 API 金鑰與自訂 API URL
 openai.api_key = 'sk-OsiRXgnEvFeUHRtJBb6eCa62B7Cd4cFd8684A17cA9E6Bf22'
@@ -31,6 +32,12 @@ def handle_message(event):
     user_message = event.message.text
     user_id = event.source.user_id
 
+    # 發送「您好」
+    line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text="您好")
+    )
+
     # 使用 ChatCompletion 搭配 gpt-3.5-turbo 模型
     gpt_response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
@@ -42,10 +49,14 @@ def handle_message(event):
     )
     gpt_answer = gpt_response['choices'][0]['message']['content'].strip()
 
+    # 等待一秒鐘後再發送 ChatGPT 的回答
+    time.sleep(1)
+
     final_answer = f"{gpt_answer}"
 
     print(f"User ID: {user_id}, Message1: {gpt_answer} , Message2: {final_answer} ")
-    # 發送回答到 LINE
+
+    # 發送 ChatGPT 的回答
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=final_answer)
@@ -56,5 +67,6 @@ def handle_message(event):
 
 if __name__ == "__main__":
     app.run(port=5000)
+
 
 
