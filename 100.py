@@ -39,7 +39,7 @@ def handle_message(event):
     # 回復訊息
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text="您好")
+        TextSendMessage(text="Hi")
     )
 
 if __name__ == "__main__":
