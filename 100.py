@@ -1,15 +1,14 @@
-from flask import Flask, request, abort
+from flask import Flask, request, abort 
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
-from openai import OpenAI
+import openai
 import traceback
+import os
 
-# OpenAI GPT 設定
-client = OpenAI(
-    api_key='sk-OsiRXgnEvFeUHRtJBb6eCa62B7Cd4cFd8684A17cA9E6Bf22',
-    base_url='https://free.v36.cm/v1'  # 這是你自訂的 API 伺服器
-)
+# GPT API Key 設定（openai 0.28.1 寫法）
+openai.api_key = 'sk-OsiRXgnEvFeUHRtJBb6eCa62B7Cd4cFd8684A17cA9E6Bf22'
+openai.api_base = 'https://free.v36.cm/v1'  # 自訂 API server URL
 
 # LINE 設定
 CHANNEL_SECRET = 'bd1f67e47488ef7d287541cfb175e6ec'
@@ -42,8 +41,8 @@ def handle_message(event):
     print(f"[收到使用者訊息] User ID: {user_id}, 訊息: {user_message}")
 
     try:
-        # 傳送至 GPT API 並取得回覆
-        response = client.chat.completions.create(
+        # 使用舊版 openai 寫法
+        response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "user", "content": user_message}
@@ -51,9 +50,8 @@ def handle_message(event):
             temperature=0.7,
             max_tokens=1000
         )
-        gpt_answer = response.choices[0].message.content.strip()
+        gpt_answer = response.choices[0].message["content"].strip()
 
-        # 回覆使用者
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=gpt_answer)
@@ -67,6 +65,7 @@ def handle_message(event):
 if __name__ == "__main__":
     print("[啟動] Flask App 執行中")
     app.run(host="0.0.0.0", port=5000)
+
 
 
 
