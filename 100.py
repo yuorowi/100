@@ -5,6 +5,7 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage
 import openai
 import traceback
 import os
+import random 
 
 # GPT API Key 設定（openai 0.28.1 寫法）
 openai.api_key = 'sk-OsiRXgnEvFeUHRtJBb6eCa62B7Cd4cFd8684A17cA9E6Bf22'
