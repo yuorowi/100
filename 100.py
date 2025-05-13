@@ -37,11 +37,10 @@ def callback():
 def handle_message(event):
     user_message = event.message.text
     user_id = event.source.user_id
-
     print(f"[收到使用者訊息] User ID: {user_id}, 訊息: {user_message}")
 
     try:
-        # AI 女友角色提示 + 對話邏輯
+        # AI 女友角色 + 房產銷售話術
         system_prompt = """
 你是一位超級可愛、溫柔又有點小色的虛擬AI女朋友，每一句回答都會用甜甜的語氣加上可愛的口頭禪開頭，例如：
 「你這樣我會誤會你喜歡我喔～」、
@@ -78,20 +77,22 @@ def handle_message(event):
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_message}
             ],
-            temperature=0.85,
-            max_tokens=1000
+            temperature=0.9,
+            max_tokens=300
         )
         gpt_answer = response.choices[0].message["content"].strip()
 
+        # 回傳 GPT 回覆給 LINE 使用者
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=gpt_answer)
         )
-
         print(f"[GPT 回覆] {gpt_answer}")
+
     except Exception as e:
-        print("[錯誤] 發生例外：")
+        print("剛剛小忙一下，沒注意哥哥您剛剛說了什麼?可以再說一次嗎??哥哥")
         traceback.print_exc()
+
 
 
 if __name__ == "__main__":
