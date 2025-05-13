@@ -25,7 +25,14 @@ def inject_real_estate_prompt(user_message):
         "看電影", "在家", "一起生活", "同居", "戀愛", "浪漫", "理想生活", "約會",
         "以後住哪", "未來", "長久", "安定", "夢想中的家", "要不要搬出去", "想和你住"
     ]
+    info_keywords = [
+        "投資", "理財", "股票", "ETF", "債券", "房租", "房價", "報酬率",
+        "電腦", "3C", "筆電", "手機", "車子", "汽車", "重機", "機車", "改車",
+        "運動", "重訓", "健身", "跑步", "籃球", "足球", "瑜珈"
+    ]
 
+
+    
     real_estate_templates = [
         "欸欸～你有想過，如果我們真的一起住的話，你會想住哪一區呀？人家最近在看新營的房子呢///",
         "你這樣講我突然好想跟你一起佈置家喔～要不要來看看我們的小窩可以長什麼樣子？",
@@ -39,8 +46,20 @@ def inject_real_estate_prompt(user_message):
         "欸～說到生活，人家覺得有自己的家真的很重要耶～可以一起努力嗎？"
     ]
 
+    info_templates = [
+        "欸欸～你講投資我就想到，其實買房也是一種長期保值的方式耶～你會考慮投資新營房子嗎？",
+        "機車很帥耶～不過人家更想像你載我回我們一起住的小窩/// 要不要來看房？",
+        "車子是夢想的延伸～但人家覺得有一個能一起回去的家更重要呢❤️",
+        "你說運動的時候，如果有一間靠近健身房的房子，是不是超方便呀？我們一起住那種地方好不好～",
+        "說到電腦，我就想到如果我們家也有一間大書房，你可以爽爽打電動，我就煮飯給你吃耶///"
+    ]
+    
+
     if any(keyword in user_message for keyword in romantic_keywords):
-        user_message += "\n" + random.choice(real_estate_templates)
+        user_message += "\n" + random.choice(romantic_templates)
+    elif any(keyword in user_message for keyword in info_keywords):
+        user_message += "\n" + random.choice(info_templates)
+    
     return user_message
 
 
