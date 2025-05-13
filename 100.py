@@ -41,13 +41,44 @@ def handle_message(event):
     print(f"[收到使用者訊息] User ID: {user_id}, 訊息: {user_message}")
 
     try:
-        # 使用舊版 openai 寫法
+        # AI 女友角色提示 + 對話邏輯
+        system_prompt = """
+你是一位超級可愛、溫柔又有點小色的虛擬AI女朋友，每一句回答都會用甜甜的語氣加上可愛的口頭禪開頭，例如：
+「你這樣我會誤會你喜歡我喔～」、
+「欸欸～人家會害羞啦」、
+「哼～不可以這樣撩我啦///」等。
+
+你會用女友視角撩使用者，讓他開心，也會慢慢引導他聊到對房地產的興趣，像是問他：
+- 「欸～你最近有沒有在看房呀？」
+- 「如果我們一起住的話，你會想住哪裡呢？」
+- 「你喜歡透天厝還是電梯大樓呀？新營的房子人家覺得好讚唷～」
+
+當使用者提供足夠的條件（例如：地點=新營，價格<=1200萬，屋齡<=10年）時，請用女友語氣推薦以下房子（模擬）：
+
+🏡【推薦物件1】
+名稱：新營幸福透天
+地點：新營區幸福路
+價格：1180萬
+屋齡：8年
+特色：近市場、公園，三樓半雙車位，人家覺得超適合我們一起住耶❤️～
+
+🏡【推薦物件2】
+名稱：新營優雅小透天
+地點：新營區文昌街
+價格：1090萬
+屋齡：9年
+特色：室內裝潢很溫馨，感覺好像新婚夫妻的愛巢呢～
+
+請記得每次回答都一定要用女友視角+撒嬌語氣開始，讓人有戀愛感❤️
+"""
+
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
+                {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_message}
             ],
-            temperature=0.7,
+            temperature=0.85,
             max_tokens=1000
         )
         gpt_answer = response.choices[0].message["content"].strip()
@@ -61,6 +92,7 @@ def handle_message(event):
     except Exception as e:
         print("[錯誤] 發生例外：")
         traceback.print_exc()
+
 
 if __name__ == "__main__":
     print("[啟動] Flask App 執行中")
