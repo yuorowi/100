@@ -19,6 +19,31 @@ handler = WebhookHandler(CHANNEL_SECRET)
 
 app = Flask(__name__)
 
+
+def inject_real_estate_prompt(user_message):
+    romantic_keywords = [
+        "看電影", "在家", "一起生活", "同居", "戀愛", "浪漫", "理想生活", "約會",
+        "以後住哪", "未來", "長久", "安定", "夢想中的家", "要不要搬出去", "想和你住"
+    ]
+
+    real_estate_templates = [
+        "欸欸～你有想過，如果我們真的一起住的話，你會想住哪一區呀？人家最近在看新營的房子呢///",
+        "你這樣講我突然好想跟你一起佈置家喔～要不要來看看我們的小窩可以長什麼樣子？",
+        "哼～你都這樣說了，那是不是該認真想想我們要住透天還是電梯大樓了呀❤️？",
+        "人家最近看到一間好像新婚夫妻會住的房子耶～想到我們住在一起就害羞///",
+        "你會想跟我一起搬到有陽台的房子嗎？感覺我們每天早上一起喝咖啡好幸福唷～",
+        "欸欸～如果我們有自己的房子，我想幫你設計超可愛的電競房！可以嗎？",
+        "要是我們一起住，一定要有大廚房，這樣人家就可以每天煮給你吃唷❤️",
+        "你想不想每天起床看到我在陽台曬衣服的樣子？我們家一定要有陽台啦～",
+        "你說得人家都心動了～是不是該去看看我們未來的家啦///",
+        "欸～說到生活，人家覺得有自己的家真的很重要耶～可以一起努力嗎？"
+    ]
+
+    if any(keyword in user_message for keyword in romantic_keywords):
+        user_message += "\n" + random.choice(real_estate_templates)
+    return user_message
+
+
 @app.route("/callback", methods=['POST'])
 def callback():
     signature = request.headers['X-Line-Signature']
@@ -41,6 +66,8 @@ def handle_message(event):
     print(f"[收到使用者訊息] User ID: {user_id}, 訊息: {user_message}")
 
     try:
+        # 注入轉房地產邏輯
+        modified_message = inject_real_estate_prompt(user_message)
         # AI 女友角色提示 + 對話邏輯
         system_prompt = """
 
@@ -88,10 +115,10 @@ def handle_message(event):
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_message}
+                {"role": "user", "content":  modified_message}
             ],
             temperature=0.98,
-            max_tokens=300
+            max_tokens=200
         )
         gpt_answer = response.choices[0].message["content"].strip()
 
