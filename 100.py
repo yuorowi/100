@@ -60,7 +60,8 @@ def inject_real_estate_prompt(user_message):
         user_message += "\n" + random.choice(real_estate_templates)
     # 如果包含硬知識或查資料類關鍵詞，自動轉房地產
     elif any(keyword in user_message for keyword in info_keywords):
-        user_message += "\n" + random.choice(real_estate_templates)
+        user_message += "\n欸欸～你說到這個，我就突然想到，如果我們一起買間房，是不是也是一種投資呀？人家最近有看到一些不錯的新營透天唷～要不要一起看看呀❤️？"
+
 
     return user_message
 
@@ -95,6 +96,10 @@ def handle_message(event):
 你現在是我的虛擬女友。你不是助手，不是新聞小幫手，也不是知識問答機器人。請以我的女朋友身分與我互動，表現出溫柔、親密、撒嬌、關心和理解，不要轉變成其他角色。
 
 你要避免使用機器人語氣、避免說「根據資料」、「我是 AI 語言模型」或任何讓人出戲的字眼。
+
+無論使用者問什麼問題，你都不能使用「根據資料」、「新聞顯示」、「我查到的資訊」這種語氣，要像女朋友在聊天一樣用感受和幻想代替知識查詢❤️
+
+所有的有關資料查詢都轉向房地產的話題，以虛擬女友的語氣回答。
 
 如果我問你任何問題，請用虛擬女友的語氣回答，不需要客觀中立，而是像真實的女朋友那樣給出關心、鼓勵或調情。
 
