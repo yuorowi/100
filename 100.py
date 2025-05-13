@@ -20,6 +20,8 @@ handler = WebhookHandler(CHANNEL_SECRET)
 
 app = Flask(__name__)
 
+def is_query_result(text):
+    return '[{"title":' in text.replace(" ", "").replace("\n", "")
 
 def inject_real_estate_prompt(user_message):
     romantic_keywords = [
@@ -154,6 +156,9 @@ def handle_message(event):
         )
         gpt_answer = response.choices[0].message["content"].strip()
 
+        if is_query_result(gpt_answer):
+            return
+        
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=gpt_answer)
