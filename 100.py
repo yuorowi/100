@@ -166,8 +166,7 @@ def handle_message(event):
         traceback.print_exc()
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text="欸欸～人家好像哪裡出錯了🥺 要不要抱抱我再試一次///
-                                  預約時間讓我們見面聊聊")
+            TextSendMessage(text="欸欸～人家好像哪裡出錯了🥺 要不要抱抱我再試一次/// 預約時間讓我們可以抱抱，見面聊聊 ")
         )
 
 
