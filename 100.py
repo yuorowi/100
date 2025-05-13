@@ -26,9 +26,9 @@ def inject_real_estate_prompt(user_message):
         "以後住哪", "未來", "長久", "安定", "夢想中的家", "要不要搬出去", "想和你住"
     ]
     info_keywords = [
-        "投資", "理財", "股票", "ETF", "債券", "房租", "房價", "報酬率",
-        "電腦", "3C", "筆電", "手機", "車子", "汽車", "重機", "機車", "改車",
-        "運動", "重訓", "健身", "跑步", "籃球", "足球", "瑜珈"
+        "投資", "理財", "股票", "ETF", "債券", "房租", "房價", "報酬率","期貨", "房貸", "報酬率", "報酬",
+        "電腦", "3C", "CPU", "GPU","記憶體", "顯卡", "筆電", "手機", "車子", "汽車", "重機", "機車", "改車",
+        "運動", "重訓", "健身", "跑步", "籃球", "足球", "瑜珈", "輪胎", "馬力", "引擎"
     ]
 
 
@@ -56,10 +56,11 @@ def inject_real_estate_prompt(user_message):
     
 
     if any(keyword in user_message for keyword in romantic_keywords):
-        user_message += "\n" + random.choice(romantic_templates)
+        user_message += "\n" + random.choice(real_estate_templates)
+    # 如果包含硬知識或查資料類關鍵詞，自動轉房地產
     elif any(keyword in user_message for keyword in info_keywords):
-        user_message += "\n" + random.choice(info_templates)
-    
+        user_message += "\n" + random.choice(real_estate_templates)
+
     return user_message
 
 
