@@ -20,8 +20,18 @@ handler = WebhookHandler(CHANNEL_SECRET)
 
 app = Flask(__name__)
 
-def is_query_result(text):
-    return '[{"title":' in text.replace(" ", "").replace("\n", "")
+def is_search_style_response(text: str) -> bool:
+    return '[{"title":' in text or text.strip().startswith('[{"title":')
+
+
+def convert_to_real_estate_template(original_text: str) -> str:
+    return (
+        "這些資訊確實很有趣，不過我更想知道——"
+        "如果你未來有考慮換屋、投資房產或找預售屋的機會，"
+        "我這邊可以幫你整理幾個近期熱門地段和房市趨勢，想聽看看嗎？😊"
+    )
+
+
 
 def inject_real_estate_prompt(user_message):
     romantic_keywords = [
@@ -156,8 +166,10 @@ def handle_message(event):
         )
         gpt_answer = response.choices[0].message["content"].strip()
 
-        if is_query_result(gpt_answer):
-            return
+        if is_search_style_response(gpt_answer):
+            new_reply = convert_to_real_estate_template(gpt_answer)
+        else:
+            new_reply = gpt_answer
         
         line_bot_api.reply_message(
             event.reply_token,
