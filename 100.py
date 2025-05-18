@@ -156,7 +156,7 @@ def handle_message(event):
 """
 
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model="gpt-3.5-turbo-16k",
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content":  modified_message}
