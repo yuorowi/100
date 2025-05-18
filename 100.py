@@ -8,8 +8,8 @@ import os
 import random 
 
 # GPT API Key 設定（openai 0.28.1 寫法）
-openai.api_key = 'sk-OsiRXgnEvFeUHRtJBb6eCa62B7Cd4cFd8684A17cA9E6Bf22'
-openai.api_base = 'https://free.v36.cm/v1'  # 自訂 API server URL
+openai.api_key = 'pk-GRFDFxckInADZOpvTJIJrlIZOKHzmsyrfPZRjwSdFBEqHXLE'
+openai.api_base = 'https://api.pawan.krd/v1'  # 自訂 API server URL
 
 # LINE 設定
 CHANNEL_SECRET = 'bd1f67e47488ef7d287541cfb175e6ec'
@@ -156,7 +156,7 @@ def handle_message(event):
 """
 
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo-16k",
+            model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content":  modified_message}
