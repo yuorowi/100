@@ -8,7 +8,7 @@ import os
 import random 
 
 # GPT API Key 設定（openai 0.28.1 寫法）
-openai.api_key = 'pk-GRFDFxckInADZOpvTJIJrlIZOKHzmsyrfPZRjwSdFBEqHXLE'
+openai.api_key = 'pk-rihzgBlryPcLLTMuqfnPKjSRlrRdlKmbdghJbnsGvsJOPWrC'
 openai.api_base = 'https://api.pawan.krd/v1'  # 自訂 API server URL
 
 # LINE 設定
