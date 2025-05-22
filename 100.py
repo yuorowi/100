@@ -8,8 +8,8 @@ import os
 import random 
 
 # GPT API Key 設定（openai 0.28.1 寫法）
-openai.api_key = 'pk-rihzgBlryPcLLTMuqfnPKjSRlrRdlKmbdghJbnsGvsJOPWrC'
-openai.api_base = 'https://api.pawan.krd/v1'  # 自訂 API server URL
+openai.api_key = 'sk-MOIQ230cklncsBqDB4dUFZgqsk0tzvluH8Gw7PdMZj1KcXpx'
+openai.api_base = 'https://api.chatanywhere.org/v1/chat/completions'  # 自訂 API server URL
 
 # LINE 設定
 CHANNEL_SECRET = 'bd1f67e47488ef7d287541cfb175e6ec'
