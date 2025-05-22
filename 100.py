@@ -7,6 +7,7 @@ import traceback
 import os
 import random 
 
+
 # GPT API Key 設定（openai 0.28.1 寫法）
 openai.api_key = 'sk-MOIQ230cklncsBqDB4dUFZgqsk0tzvluH8Gw7PdMZj1KcXpx'
 openai.api_base = 'https://api.chatanywhere.org/v1/chat/completions'  # 自訂 API server URL
@@ -17,6 +18,8 @@ CHANNEL_ACCESS_TOKEN = 'Ei9G4MF8Nl0DsiAqWJqNtPAVsjfMi6ljbFB+O9DcoxR505eQqiAcX/e+
 
 line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(CHANNEL_SECRET)
+
+
 
 app = Flask(__name__)
 
